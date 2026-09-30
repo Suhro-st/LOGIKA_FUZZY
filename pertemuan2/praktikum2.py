@@ -3,26 +3,24 @@ import matplotlib.pyplot as plt
 
 # ==========================================================
 # 1. DEFINISI FUNGSI KEANGGOTAAN LINGUISTIK
-#    VARIABEL: PENGGUNAAN CPU SERVER
-#    DOMAIN: 0 - 100 %
+#    VARIABEL: USIA
+#    DOMAIN: 0 - 150 TAHUN
 # ==========================================================
 
 # ----------------------------------------------------------
-# RENDAH
-# Bentuk bahu kiri
-# Penuh pada <= 20
-# Turun sampai 0 pada 40
+# BAYI / ANAK USIA DINI
+# a = 0, b = 0, c = 5, d = 6
 # ----------------------------------------------------------
-def mf_rendah(x):
+def mf_bayi(x):
     kondisi = [
-        x <= 20,
-        (x > 20) & (x < 40),
-        x >= 40
+        x <= 5,
+        (x > 5) & (x < 6),
+        x >= 6
     ]
 
     pilihan = [
         1.0,
-        (40.0 - x) / (40.0 - 20.0),
+        (6.0 - x) / (6.0 - 5.0),
         0.0
     ]
 
@@ -30,24 +28,23 @@ def mf_rendah(x):
 
 
 # ----------------------------------------------------------
-# NORMAL
-# Bentuk segitiga
-# Mulai pada 30
-# Puncak pada 50
-# Berakhir pada 70
+# ANAK-ANAK
+# a = 5, b = 6, c = 11, d = 12
 # ----------------------------------------------------------
-def mf_normal(x):
+def mf_anak(x):
     kondisi = [
-        x <= 30,
-        (x > 30) & (x <= 50),
-        (x > 50) & (x < 70),
-        x >= 70
+        x <= 5,
+        (x > 5) & (x < 6),
+        (x >= 6) & (x <= 11),
+        (x > 11) & (x < 12),
+        x >= 12
     ]
 
     pilihan = [
         0.0,
-        (x - 30.0) / (50.0 - 30.0),
-        (70.0 - x) / (70.0 - 50.0),
+        (x - 5.0) / (6.0 - 5.0),
+        1.0,
+        (12.0 - x) / (12.0 - 11.0),
         0.0
     ]
 
@@ -55,21 +52,92 @@ def mf_normal(x):
 
 
 # ----------------------------------------------------------
-# TINGGI
-# Bentuk bahu kanan
-# Mulai naik pada 60
-# Penuh pada >= 80
+# REMAJA
+# a = 9, b = 10, c = 19, d = 20
 # ----------------------------------------------------------
-def mf_tinggi(x):
+def mf_remaja(x):
     kondisi = [
-        x <= 60,
-        (x > 60) & (x < 80),
-        x >= 80
+        x <= 9,
+        (x > 9) & (x < 10),
+        (x >= 10) & (x <= 19),
+        (x > 19) & (x < 20),
+        x >= 20
     ]
 
     pilihan = [
         0.0,
-        (x - 60.0) / (80.0 - 60.0),
+        (x - 9.0) / (10.0 - 9.0),
+        1.0,
+        (20.0 - x) / (20.0 - 19.0),
+        0.0
+    ]
+
+    return np.select(kondisi, pilihan)
+
+
+# ----------------------------------------------------------
+# PEMUDA
+# a = 14, b = 15, c = 24, d = 25
+# ----------------------------------------------------------
+def mf_pemuda(x):
+    kondisi = [
+        x <= 14,
+        (x > 14) & (x < 15),
+        (x >= 15) & (x <= 24),
+        (x > 24) & (x < 25),
+        x >= 25
+    ]
+
+    pilihan = [
+        0.0,
+        (x - 14.0) / (15.0 - 14.0),
+        1.0,
+        (25.0 - x) / (25.0 - 24.0),
+        0.0
+    ]
+
+    return np.select(kondisi, pilihan)
+
+
+# ----------------------------------------------------------
+# DEWASA
+# a = 19, b = 20, c = 65, d = 66
+# ----------------------------------------------------------
+def mf_dewasa(x):
+    kondisi = [
+        x <= 19,
+        (x > 19) & (x < 20),
+        (x >= 20) & (x <= 65),
+        (x > 65) & (x < 66),
+        x >= 66
+    ]
+
+    pilihan = [
+        0.0,
+        (x - 19.0) / (20.0 - 19.0),
+        1.0,
+        (66.0 - x) / (66.0 - 65.0),
+        0.0
+    ]
+
+    return np.select(kondisi, pilihan)
+
+
+# ----------------------------------------------------------
+# LANSIA
+# a = 64, b = 65, c = 150, d = 150
+# Domain berakhir pada 150
+# ----------------------------------------------------------
+def mf_lansia(x):
+    kondisi = [
+        x <= 64,
+        (x > 64) & (x < 65),
+        (x >= 65) & (x <= 150)
+    ]
+
+    pilihan = [
+        0.0,
+        (x - 64.0) / (65.0 - 64.0),
         1.0
     ]
 
@@ -77,44 +145,45 @@ def mf_tinggi(x):
 
 
 # ==========================================================
-# 2. DEFINISI STRUKTUR VARIABEL LINGUISTIK
+# 2. STRUKTUR VARIABEL LINGUISTIK
 # ==========================================================
 
-variabel_cpu = {
-    "nama": "Penggunaan CPU Server",
-    "satuan": "%",
-    "semesta": (0.0, 100.0),
+variabel_usia = {
+    "nama": "Usia",
+    "satuan": "tahun",
+    "semesta": (0.0, 150.0),
 
     "label": {
-        "Rendah": mf_rendah,
-        "Normal": mf_normal,
-        "Tinggi": mf_tinggi
+        "Bayi / Anak Usia Dini": mf_bayi,
+        "Anak-anak": mf_anak,
+        "Remaja": mf_remaja,
+        "Pemuda": mf_pemuda,
+        "Dewasa": mf_dewasa,
+        "Lansia": mf_lansia
     }
 }
 
 
 # ==========================================================
-# 3. FUNGSI FUZZIFIKASI INPUT TUNGGAL
+# 3. FUNGSI FUZZIFIKASI
 # ==========================================================
 
 def fuzzifikasi(nilai_crisp, variabel):
     """
-    Memetakan nilai crisp ke semua derajat
-    keanggotaan linguistik.
+    Mengubah nilai crisp menjadi derajat keanggotaan
+    pada setiap kategori usia.
     """
 
     hasil = {}
 
     u_min, u_max = variabel["semesta"]
 
-    # Cek apakah input berada dalam domain
     if not (u_min <= nilai_crisp <= u_max):
         raise ValueError(
-            f"Input {nilai_crisp} di luar semesta "
+            f"Input {nilai_crisp} di luar domain "
             f"[{u_min}, {u_max}]"
         )
 
-    # Hitung derajat keanggotaan setiap label
     for nama_label, fungsi_mf in variabel["label"].items():
 
         derajat = float(
@@ -127,71 +196,91 @@ def fuzzifikasi(nilai_crisp, variabel):
 
 
 # ==========================================================
-# 4. MEMBUAT DOMAIN CPU
+# 4. MEMBUAT DOMAIN USIA
 # ==========================================================
 
-x_semesta = np.linspace(0.0, 100.0, 500)
+x_semesta = np.linspace(0.0, 150.0, 1000)
 
-y_rendah = mf_rendah(x_semesta)
-y_normal = mf_normal(x_semesta)
-y_tinggi = mf_tinggi(x_semesta)
+y_bayi = mf_bayi(x_semesta)
+y_anak = mf_anak(x_semesta)
+y_remaja = mf_remaja(x_semesta)
+y_pemuda = mf_pemuda(x_semesta)
+y_dewasa = mf_dewasa(x_semesta)
+y_lansia = mf_lansia(x_semesta)
 
 
 # ==========================================================
-# 5. PLOT KETIGA FUNGSI KEANGGOTAAN
+# 5. VISUALISASI SEMUA FUNGSI KEANGGOTAAN
 # ==========================================================
 
-plt.figure(figsize=(10, 5.5))
+plt.figure(figsize=(14, 7))
 
 plt.plot(
     x_semesta,
-    y_rendah,
-    label="Rendah",
-    color="#2ca02c",
+    y_bayi,
+    label="Bayi / Anak Usia Dini",
     linewidth=2.5
 )
 
 plt.plot(
     x_semesta,
-    y_normal,
-    label="Normal",
-    color="#ff7f0e",
+    y_anak,
+    label="Anak-anak",
     linewidth=2.5
 )
 
 plt.plot(
     x_semesta,
-    y_tinggi,
-    label="Tinggi",
-    color="#d62728",
+    y_remaja,
+    label="Remaja",
+    linewidth=2.5
+)
+
+plt.plot(
+    x_semesta,
+    y_pemuda,
+    label="Pemuda",
+    linewidth=2.5
+)
+
+plt.plot(
+    x_semesta,
+    y_dewasa,
+    label="Dewasa",
+    linewidth=2.5
+)
+
+plt.plot(
+    x_semesta,
+    y_lansia,
+    label="Lansia",
     linewidth=2.5
 )
 
 
 # ==========================================================
-# 6. PENGUJIAN FUZZIFIKASI
-#    INPUT CPU = 10%
+# 6. CONTOH INPUT CRISP
 # ==========================================================
 
-x_uji = 10
+x_uji = 18
 
 derajat_uji = fuzzifikasi(
     x_uji,
-    variabel_cpu
+    variabel_usia
 )
 
 
-# Garis vertikal input x = 10
+# Garis vertikal untuk menunjukkan posisi input
 plt.axvline(
     x=x_uji,
-    color="purple",
     linestyle="--",
     linewidth=1.8,
-    label=f"Input x = {x_uji}%"
+    label=f"Input x = {x_uji} tahun"
 )
 
 
-# Titik hasil fuzzifikasi
+# Menampilkan titik pada fungsi yang mempunyai
+# derajat keanggotaan lebih dari 0
 for label, derajat in derajat_uji.items():
 
     if derajat > 0:
@@ -199,7 +288,6 @@ for label, derajat in derajat_uji.items():
         plt.scatter(
             x_uji,
             derajat,
-            color="purple",
             s=70,
             zorder=5
         )
@@ -210,13 +298,13 @@ for label, derajat in derajat_uji.items():
 # ==========================================================
 
 plt.title(
-    "Variabel Linguistik: Penggunaan CPU Server",
-    fontsize=13,
+    "Fungsi Keanggotaan Linguistik Variabel Usia",
+    fontsize=14,
     fontweight="bold"
 )
 
 plt.xlabel(
-    "Penggunaan CPU (%)",
+    "Usia (tahun)",
     fontsize=11
 )
 
@@ -225,11 +313,11 @@ plt.ylabel(
     fontsize=11
 )
 
-plt.xlim(0, 100)
+plt.xlim(0, 150)
 plt.ylim(-0.05, 1.1)
 
 plt.xticks(
-    np.arange(0, 101, 10)
+    np.arange(0, 151, 10)
 )
 
 plt.yticks(
@@ -243,19 +331,19 @@ plt.grid(
 )
 
 plt.legend(
-    loc="center right",
-    fontsize=10
+    loc="center left",
+    bbox_to_anchor=(1, 0.5)
 )
 
 plt.tight_layout()
 
 
 # ==========================================================
-# 8. SIMPAN HASIL GRAFIK
+# 8. SIMPAN GRAFIK
 # ==========================================================
 
 plt.savefig(
-    "variabel_linguistik_cpu_server.png",
+    "fungsi_keanggotaan_usia.png",
     dpi=300,
     bbox_inches="tight"
 )
@@ -264,24 +352,18 @@ plt.show()
 
 
 # ==========================================================
-# 9. TABEL HASIL FUZZIFIKASI
+# 9. HASIL FUZZIFIKASI
 # ==========================================================
 
-print()
-print("=" * 55)
-print(f"HASIL FUZZIFIKASI CPU = {x_uji}%")
-print("=" * 55)
-
+print("=" * 60)
 print(
-    f"{'Label':<15} | {'Derajat Keanggotaan μ(x)':>25}"
+    f"HASIL FUZZIFIKASI USIA = "
+    f"{x_uji} {variabel_usia['satuan']}"
 )
-
-print("-" * 55)
+print("=" * 60)
 
 for label, derajat in derajat_uji.items():
 
     print(
-        f"{label:<15} | {derajat:>25.4f}"
+        f"{label:<25} : μ = {derajat}"
     )
-
-print("=" * 55)
