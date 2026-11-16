@@ -1,0 +1,48 @@
+flowchart TD
+    A([Mulai]) --> B["Jalankan aplikasi<br/>streamlit run app.py"]
+    B --> C[("Inisialisasi basis data SQLite<br/>buat tabel dan isi 40 karyawan<br/>bila gaji_karyawan.db belum ada")]
+    C --> M{"Pilih menu<br/>(sidebar)"}
+
+    M --> D1["Dashboard"]
+    M --> D2["Hitung Rekomendasi"]
+    M --> D3["Dataset Karyawan"]
+    M --> D4["Riwayat dan Ekspor"]
+    M --> D5["Tentang Sistem"]
+
+    D1 --> D1a["Baca tabel karyawan"]
+    D1a --> D1b["Hitung prediksi fuzzy<br/>seluruh karyawan"]
+    D1b --> D1c["Tampilkan MAE, RMSE,<br/>grafik aktual vs prediksi"]
+
+    D2 --> H1["Input: masa kerja, nilai kinerja,<br/>pendidikan terakhir"]
+    H1 --> H2{"Input valid?"}
+    H2 -- Tidak --> HE["Tampilkan pesan kesalahan<br/>(validasi)"]
+    HE --> H1
+    H2 -- Ya --> H3["Fuzzifikasi<br/>(derajat keanggotaan)"]
+    H3 --> H4["Evaluasi 27 aturan IF-THEN<br/>(AND = min, implikasi = min)"]
+    H4 --> H5["Agregasi seluruh aturan (max)"]
+    H5 --> H6["Defuzzifikasi Centroid"]
+    H6 --> H7["Tentukan kategori gaji<br/>dan format Rupiah"]
+    H7 --> H8["Simpan ke tabel<br/>riwayat_perhitungan"]
+    H8 --> H9["Tampilkan hasil,<br/>grafik fungsi keanggotaan dan inferensi"]
+
+    D3 --> D3a["Baca tabel karyawan"]
+    D3a --> D3b["Filter pendidikan<br/>dan cari nama"]
+    D3b --> D3c["Tampilkan tabel /<br/>Unduh basis data .db"]
+
+    D4 --> D4a["Baca tabel riwayat_perhitungan"]
+    D4a --> D4b["Tampilkan riwayat"]
+    D4b --> D4c["Hapus riwayat /<br/>Unduh basis data .db"]
+
+    D5 --> D5a["Tampilkan variabel, fungsi keanggotaan,<br/>27 aturan IF-THEN"]
+
+    DB[("gaji_karyawan.db (SQLite)<br/>karyawan | riwayat_perhitungan | hasil_blackbox")]
+    D1a -.-> DB
+    D3a -.-> DB
+    D4a -.-> DB
+    H8 -.-> DB
+
+    D1c --> M
+    H9 --> M
+    D3c --> M
+    D4c --> M
+    D5a --> M
