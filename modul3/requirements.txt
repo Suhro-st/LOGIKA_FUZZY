@@ -1,0 +1,7 @@
+streamlit>=1.30
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
+# Basis data memakai SQLite (modul sqlite3 sudah bawaan Python, tidak perlu dipasang).
+# scikit-fuzzy hanya dipakai oleh notebook Google Colab (aplikasi Streamlit memakai fuzzy_logic.py berbasis NumPy)
+scikit-fuzzy>=0.4.2
